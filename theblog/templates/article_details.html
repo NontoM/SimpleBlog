@@ -3,23 +3,25 @@
 
 {% block content %}
 
+
 <h1>{{ post.title }}</h1>
 
 <small>By: {{ post.author.first_name }} 
     {{ post.author.last_name}} -  {{ post.post_date}}
     
     {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
+            <a href="{% url 'update_post' post.pk %}">Edit</a>
 
-    <a href="{% url 'update_post' post.pk %}">Edit</a>
-
-    <a href="{% url 'delete_post' post.pk %}">Delete</a>
+            <a href="{% url 'delete_post' post.pk %}">Delete</a>
+        {% endif %}
     {% endif %}
 </small>
 <br>
 <hr>
 <br>
 {{ post.body|safe }}
-
+<!--if user.is_authenticated and post.author.id == user.id -->
 <br><br>
 <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 

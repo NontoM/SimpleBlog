@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<h1>Add Post</h1>
+<h1>Add Post...</h1>
 <div class="form-group">
 <form action="" method="POST">
     {% csrf_token %}
@@ -12,6 +12,12 @@
     <button type="submit" class="bt btn-secondary">Post</button>
 </form>
 </div>
+
+<script>
+    var name = "{{ user.id}}";
+    document.getElementById('elder').value = name;
+</script>
+
 {% else %}
 
 You have to login to view this page.

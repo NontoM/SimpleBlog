@@ -13,15 +13,36 @@ class HomeView(ListView):
     #ordering = ['-post_date']
     ordering = ['-id']
 
-def CategoryView(request, cats): #cats from url
-    category_posts = Post.objects.filter(category=cats)
-    return render(request, 'categories.html', {'cats': cats, 'category_posts':category_posts})
+    #pass context data into the page
+    def get_context_data(self, *args, **kwargs):
+        cat_menu = Category.objects.all() #get all data in Category model and assign it to cat_menu variable
+        context = super(HomeView, self).get_context_data(*args, **kwargs)
+        context["cat_menu"] = cat_menu
+        return context
 
+
+def CategoryView(request, cats): #cats from url
+    category_posts = Post.objects.filter(category__iexact=cats.replace('-', ' ')) #replace category - with a space, ilter using __iexact  which takes all the arguments ignoring upper and lower case
+    return render(request, 'categories.html', {'cats':cats.title().replace('-', ' '), 'category_posts':category_posts})
+    #cats.title(), title case
+
+
+#querying database to grab all Category data(names), assigning to cat_menu_lis variable,passing that variable into our context dictionary, we can now access to this page
+def CategoryListView(request): #cats from url
+    cat_menu_list = Category.objects.all()
+    return render(request, 'category_list.html', {'cat_menu_list':cat_menu_list})
+    #cats.title(), title case
 
 class ArticleDetailView(DetailView):
     model = Post
     template_name = 'article_details.html'
 
+ #pass context data into the page
+    def get_context_data(self, *args, **kwargs):
+        cat_menu = Category.objects.all() #get all data in Category model and assign it to cat_menu variable
+        context = super(ArticleDetailView, self).get_context_data(*args, **kwargs)
+        context["cat_menu"] = cat_menu
+        return context
 
 class AddPostView(CreateView):
     model = Post

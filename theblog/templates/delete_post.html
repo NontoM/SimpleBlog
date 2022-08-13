@@ -4,21 +4,25 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<h1>Delete Post...</h1>
-<br><br>
-<h3>Delete: {{post.title}}</h3>
-<div class="form-group">
-    <form action="" method="POST">
-        {% csrf_token %}
-        <strong>Are you sure?</strong>
+    {% if user.id == post.author.id %}
+
+        <h1>Delete Post...</h1>
         <br><br>
-        <button type="submit" class="bt btn-secondary">Delete Post</button>
-    </form>
-</div>
+        <h3>Delete: {{post.title}}</h3>
+        <div class="form-group">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <strong>Are you sure?</strong>
+                <br><br>
+                <button type="submit" class="bt btn-secondary">Delete Post</button>
+            </form>
+        </div>
+    {% else %}
+    You are not allowed to view this page.
+    {% endif %}
+
 {% else %}
-
-You have to login to view this page.
-
+You are not allowed to view this page.
 {% endif %}
 
 {% endblock %}
